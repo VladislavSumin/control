@@ -28,4 +28,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "control"
 
+include(
+    ":core:logging",
+)
+
 include(":server")

@@ -1,6 +1,13 @@
 [versions]
 kotlin-core = "1.6.10"
 
+# Logging
+logging-kermit = "1.1.2"
+
+
 [libraries]
 # Plugins
 gradlePlugins-kotlin-core = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-core" }
+
+# Logging
+logging-kermit = { module = "co.touchlab:kermit", version.ref = "logging-kermit" }
