@@ -1,7 +1,3 @@
 plugins {
-    kotlin("multiplatform")
-}
-
-kotlin {
-    jvm()
+    id("ru.vs.convention.multiplatform.jvm")
 }
