@@ -8,8 +8,7 @@ fun Logger.setupDefault() {
 }
 
 /**
- * log4j использует свои потоки для записи логов
- * Поэтому процесс не завершиться корректно если не завершить работу логера
+ * Log4j2 logger doesn't close automatically. We must close them manually.
  */
 fun Logger.shutdown() {
     LogManager.shutdown()
