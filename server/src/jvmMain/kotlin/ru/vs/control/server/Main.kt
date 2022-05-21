@@ -1,8 +1,10 @@
 package ru.vs.control.server
 
 import co.touchlab.kermit.Logger
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.kodein.di.direct
+import org.kodein.di.instance
+import ru.vs.control.server.web.WebServer
 import ru.vs.core.logging.setupDefault
 import ru.vs.core.logging.shutdown
 
@@ -19,9 +21,8 @@ fun main() {
     // Create DI
     val di = createDiGraph()
 
-    serverScope.launch {
-        delay(Long.MAX_VALUE)
-    }
+    // Start web server
+    serverScope.launch { di.direct.instance<WebServer>().run() }
 
     // coroutines use daemon thread, we must keep main thread alive
     serverScope.blockingAwait()
