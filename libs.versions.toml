@@ -1,6 +1,10 @@
 [versions]
+# Kotlin
 kotlin-core = "1.6.10"
 kotlin-coroutines = "1.6.1"
+
+# Other
+kodein = "7.11.0"
 
 # Logging
 logging-kermit = "1.1.2"
@@ -14,6 +18,9 @@ gradlePlugins-kotlin-core = { module = "org.jetbrains.kotlin:kotlin-gradle-plugi
 
 # Kotlin
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
+
+# Kodein
+kodein-core = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
 
 # Logging
 logging-kermit = { module = "co.touchlab:kermit", version.ref = "logging-kermit" }

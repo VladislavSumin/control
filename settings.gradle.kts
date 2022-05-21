@@ -30,6 +30,7 @@ rootProject.name = "control"
 
 include(
     ":core:coroutines",
+    ":core:di",
     ":core:logging",
     ":core:logging-slf4j",
 )

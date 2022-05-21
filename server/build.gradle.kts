@@ -7,6 +7,7 @@ kotlin {
         named("jvmMain") {
             dependencies {
                 implementation(project(":core:coroutines"))
+                implementation(project(":core:di"))
                 implementation(project(":core:logging-slf4j"))
             }
         }
