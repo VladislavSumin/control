@@ -5,6 +5,7 @@ kotlin-coroutines = "1.6.1"
 
 # Other
 kodein = "7.11.0"
+ktor = "2.0.1"
 
 # Logging
 logging-kermit = "1.1.2"
@@ -21,6 +22,9 @@ kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-co
 
 # Kodein
 kodein-core = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
+
+# Ktor
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
 
 # Logging
 logging-kermit = { module = "co.touchlab:kermit", version.ref = "logging-kermit" }

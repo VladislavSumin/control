@@ -8,6 +8,7 @@ kotlin {
             dependencies {
                 implementation(project(":core:coroutines"))
                 implementation(project(":core:di"))
+                implementation(project(":core:ktor-server"))
                 implementation(project(":core:logging-slf4j"))
 
                 implementation(project(":feature:proxy:server"))
