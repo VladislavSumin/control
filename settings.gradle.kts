@@ -35,4 +35,8 @@ include(
     ":core:logging-slf4j",
 )
 
+include(
+    ":feature:proxy:server",
+)
+
 include(":server")
