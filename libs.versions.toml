@@ -1,0 +1,4 @@
+[versions]
+kotlin = "1.6.10"
+
+[libraries]
