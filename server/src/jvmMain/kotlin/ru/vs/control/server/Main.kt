@@ -16,6 +16,9 @@ fun main() {
     // Create server scope
     val serverScope = ServerScope(::closeLogger)
 
+    // Create DI
+    val di = createDiGraph()
+
     serverScope.launch {
         delay(Long.MAX_VALUE)
     }
