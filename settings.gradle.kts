@@ -29,6 +29,7 @@ dependencyResolutionManagement {
 rootProject.name = "control"
 
 include(
+    ":core:coroutines",
     ":core:logging",
     ":core:logging-slf4j",
 )

@@ -1,5 +1,6 @@
 [versions]
 kotlin-core = "1.6.10"
+kotlin-coroutines = "1.6.1"
 
 # Logging
 logging-kermit = "1.1.2"
@@ -10,6 +11,9 @@ logging-slf4j = "1.7.35"
 [libraries]
 # Plugins
 gradlePlugins-kotlin-core = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-core" }
+
+# Kotlin
+kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
 
 # Logging
 logging-kermit = { module = "co.touchlab:kermit", version.ref = "logging-kermit" }

@@ -6,6 +6,7 @@ kotlin {
     sourceSets {
         named("jvmMain") {
             dependencies {
+                implementation(project(":core:coroutines"))
                 implementation(project(":core:logging-slf4j"))
             }
         }
