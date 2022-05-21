@@ -1,28 +1,27 @@
 package ru.vs.control.server.web
 
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 
-//private const val SERVER_DEFAULT_PORT = 8080
+private const val SERVER_DEFAULT_PORT = 8080
 
 interface WebServer {
     suspend fun run()
 }
 
-class WebServerImpl() : WebServer {
+class WebServerImpl : WebServer {
     override suspend fun run() {
         withContext(CoroutineName("web-server")) {
-            delay(Long.MAX_VALUE)
-//            val environment = createEnvironment()
-//            val server = createEmbeddedServer(environment)
-//            server.start(true)
+            val environment = createEnvironment()
+            val server = createEmbeddedServer(environment)
+            server.start(true)
         }
     }
-//
-//    private fun createEmbeddedServer(environment: ApplicationEngineEnvironment): ApplicationEngine =
-//        embeddedServer(Netty, environment)
-//
+
+    //
 //    private fun getTrustManagerFactory(): TrustManagerFactory? {
 //        val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
 ////        trustManagerFactory.init(null)
@@ -53,14 +52,16 @@ class WebServerImpl() : WebServer {
 //        }
 //    }
 //
-//    private fun CoroutineScope.createEnvironment(): ApplicationEngineEnvironment {
-//        return applicationEngineEnvironment {
-//            parentCoroutineContext = coroutineContext
-//
-//            connector {
-//                host = "0.0.0.0"
-//                port = SERVER_DEFAULT_PORT
-//            }
+    private fun CoroutineScope.createEnvironment(): ApplicationEngineEnvironment {
+        return applicationEngineEnvironment {
+            // Append parent coroutine context
+            parentCoroutineContext = coroutineContext
+
+            connector {
+                host = "0.0.0.0"
+                port = SERVER_DEFAULT_PORT
+            }
+
 //            module {
 ////                // Creates a new HttpClient
 ////                val client = HttpClient(OkHttp) {
@@ -184,6 +185,9 @@ class WebServerImpl() : WebServer {
 //                    }
 //                }
 //            }
-//        }
-//    }
+        }
+    }
+
+    private fun createEmbeddedServer(environment: ApplicationEngineEnvironment): ApplicationEngine =
+        embeddedServer(Netty, environment)
 }
