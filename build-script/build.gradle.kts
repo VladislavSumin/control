@@ -13,11 +13,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-//gradlePlugin {
-//    plugins {
-//        create("EmptyPlugin") {
-//            id = "ru.vs.empty_plugin"
-//            implementationClass = "ru.vs.build_script.EmptyPlugin"
-//        }
-//    }
-//}
+gradlePlugin {
+    plugins {
+        create("EmptyPlugin") {
+            id = "ru.vs.empty_plugin"
+            implementationClass = "ru.vs.build_script.plugins.empty_plugin.EmptyPlugin"
+        }
+    }
+}
