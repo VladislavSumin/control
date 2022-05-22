@@ -57,59 +57,17 @@ internal class ProxyModuleImpl(
     }
 
     private suspend fun PipelineContext<Unit, ApplicationCall>.proxy(url: String) {
-        val context = this
-
-        if (context.call.request.uri.contains("ticket")) {
-            println("a")
-        }
-
-        if (context.call.request.headers["Connection"] != "keep-alive") {
-            println("b")
-        }
-
-        if (context.call.request.headers["Upgrade"] != null) {
-            println("Upgrade = ${context.call.request.headers["Upgrade"]}")
-        }
-        call.request.httpVersion
+        val pipelineContext = this
 
         try {
-            val response =
-                httpClient.request("https://pve1.test.vs:8006${call.request.uri}") {
-//                        client.request<HttpStatement>("https://zoneminder.test.vs${call.request.uri}") {
-                    method = context.call.request.httpMethod
-
-                    headers {
-                        this.appendAll(
-                            context.call.request.headers
-                                .filter { key, _ ->
-                                    !key.equals(
-                                        HttpHeaders.ContentType,
-                                        ignoreCase = true
-                                    ) && !key.equals(HttpHeaders.ContentLength, ignoreCase = true)
-                                }
-
-                        )
-                    }
-                    setBody(object : OutgoingContent.WriteChannelContent() {
-                        override val contentType: ContentType?
-                            get() = call.request.contentType()
-
-                        override val contentLength: Long? =
-                            // тут нужно смотреть мб по типу запроса?
-                            if (context.call.request.receiveChannel().isClosedForRead) 0 else
-                                call.request.headers["content-length"]?.toLong()
-
-                        override suspend fun writeTo(channel: ByteWriteChannel) {
-                            try {
-                                val i = context.call.request.receiveChannel().copyAndClose(channel)
-                                channel.close()
-                                println("written $i / content len $contentLength")
-                            } catch (e: Exception) {
-                                println("BBBB")
-                            }
-                        }
-                    })
+            val response = runCatching {
+                httpClient.request("$url${call.request.uri}") {
+                    method = pipelineContext.call.request.httpMethod
+                    setBody(ProxiedOutgoingContent(call.request))
                 }
+            }
+                .onFailure { logger.w(it) { "Error while executing request" } }
+                .getOrThrow()
 
 
             val proxiedHeaders = response.headers
@@ -149,6 +107,7 @@ internal class ProxyModuleImpl(
 //                        )
             println(e)
         } catch (e: ClientRequestException) {
+            println("bbbbbbbbb")
             call.respond(e.response.status)
         } catch (e: Exception) {
             println("aaa: $e")
