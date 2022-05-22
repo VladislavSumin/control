@@ -25,6 +25,7 @@ kodein-core = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
 
 # Ktor
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 
 # Logging
 logging-kermit = { module = "co.touchlab:kermit", version.ref = "logging-kermit" }
