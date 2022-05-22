@@ -5,6 +5,7 @@ import io.ktor.server.netty.*
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
+import ru.vs.control.server.feature.proxy.web.ProxyModule
 
 private const val SERVER_DEFAULT_PORT = 8080
 
@@ -12,7 +13,9 @@ interface WebServer {
     suspend fun run()
 }
 
-class WebServerImpl : WebServer {
+class WebServerImpl(
+    private val proxyModule: ProxyModule,
+) : WebServer {
     override suspend fun run() {
         withContext(CoroutineName("web-server")) {
             val environment = createEnvironment()
@@ -61,6 +64,8 @@ class WebServerImpl : WebServer {
                 host = "0.0.0.0"
                 port = SERVER_DEFAULT_PORT
             }
+
+            proxyModule.apply { install() }
 
 //            module {
 ////                // Creates a new HttpClient
