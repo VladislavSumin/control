@@ -1,7 +1,6 @@
 package ru.vs.control.server.feature.proxy.web
 
 import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -13,29 +12,20 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.util.*
 import io.ktor.utils.io.*
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManagerFactory
-import javax.net.ssl.X509TrustManager
 
 interface ProxyModule {
     fun ApplicationEngineEnvironmentBuilder.install()
 }
 
 internal class ProxyModuleImpl(
-    private val httpClient: HttpClient
+    defaultHttpClient: HttpClient
 ) : ProxyModule {
+    private val httpClient = defaultHttpClient.config {
+        followRedirects = false
+    }
+
     override fun ApplicationEngineEnvironmentBuilder.install() {
         module {
-            // Creates a new HttpClient
-            val client = HttpClient(OkHttp) {
-                engine {
-                    config {
-                        sslSocketFactory(getSslContext()!!.socketFactory, getTrustManager())
-                    }
-                }
-            }
-
             intercept(ApplicationCallPipeline.Call) {
                 val context = this
 
@@ -54,7 +44,7 @@ internal class ProxyModuleImpl(
 
                 try {
                     val response =
-                        client.request("https://pve1.test.vs:8006${call.request.uri}") {
+                        httpClient.request("https://pve1.test.vs:8006${call.request.uri}") {
 //                        client.request<HttpStatement>("https://zoneminder.test.vs${call.request.uri}") {
                             method = context.call.request.httpMethod
 
@@ -131,42 +121,10 @@ internal class ProxyModuleImpl(
                 } catch (e: ClientRequestException) {
                     call.respond(e.response.status)
                 } catch (e: Exception) {
-                    println("aaa")
+                    println("aaa: $e")
                     throw RuntimeException(e)
                 }
             }
         }
     }
-
-
-    private fun getTrustManagerFactory(): TrustManagerFactory? {
-        val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-//        trustManagerFactory.init(null)
-        return trustManagerFactory
-    }
-
-    private fun getSslContext(): SSLContext? {
-        val sslContext = SSLContext.getInstance("TLS")
-        sslContext.init(null, arrayOf(getTrustManager()), null)
-        return sslContext
-    }
-
-    private fun getTrustManager(): X509TrustManager {
-        return object : X509TrustManager {
-            override fun getAcceptedIssuers(): Array<X509Certificate> {
-                return emptyArray()
-            }
-
-            override fun checkClientTrusted(
-                certs: Array<X509Certificate>, authType: String
-            ) {
-            }
-
-            override fun checkServerTrusted(
-                certs: Array<X509Certificate>, authType: String
-            ) {
-            }
-        }
-    }
-
 }
