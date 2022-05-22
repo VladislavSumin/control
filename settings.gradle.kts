@@ -31,6 +31,7 @@ rootProject.name = "control"
 include(
     ":core:coroutines",
     ":core:di",
+    ":core:ktor-client",
     ":core:ktor-server",
     ":core:logging",
     ":core:logging-slf4j",

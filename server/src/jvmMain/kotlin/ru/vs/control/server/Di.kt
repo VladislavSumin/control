@@ -7,9 +7,11 @@ import ru.vs.control.server.web.WebServer
 import ru.vs.control.server.web.WebServerImpl
 import ru.vs.core.di.Modules
 import ru.vs.core.di.i
+import ru.vs.core.ktor_client.coreKtorClient
 
 fun createDiGraph() = DI {
     // Core modules
+    importOnce(Modules.coreKtorClient())
 
     // Feature modules
     importOnce(Modules.featureProxy())

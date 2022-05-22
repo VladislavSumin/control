@@ -6,7 +6,7 @@ kotlin {
     sourceSets {
         named("jvmMain") {
             dependencies {
-                implementation(libs.ktor.client.okhttp)
+                implementation(project(":core:ktor-client"))
             }
         }
     }

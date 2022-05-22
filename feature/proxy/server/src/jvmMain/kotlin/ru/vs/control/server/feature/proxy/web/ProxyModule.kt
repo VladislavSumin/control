@@ -22,7 +22,9 @@ interface ProxyModule {
     fun ApplicationEngineEnvironmentBuilder.install()
 }
 
-internal class ProxyModuleImpl : ProxyModule {
+internal class ProxyModuleImpl(
+    private val httpClient: HttpClient
+) : ProxyModule {
     override fun ApplicationEngineEnvironmentBuilder.install() {
         module {
             // Creates a new HttpClient
