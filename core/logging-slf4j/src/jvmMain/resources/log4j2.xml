@@ -21,11 +21,10 @@
             <AppenderRef ref="Console"/>
             <AppenderRef ref="AsyncFile"/>
         </Root>
-        <!--   Пример кастомных настроек для саппреса всякого мусора   -->
-        <!--        <Logger name="io.netty" additivity="false" level="INFO">-->
-        <!--            <AppenderRef ref="Console"/>-->
-        <!--            <AppenderRef ref="AsyncFile"/>-->
-        <!--        </Logger>-->
+        <Logger name="io.netty" additivity="false" level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="AsyncFile"/>
+        </Logger>
     </Loggers>
 
 </Configuration>
