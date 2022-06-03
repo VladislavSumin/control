@@ -5,7 +5,7 @@ kotlin-coroutines = "1.6.1"
 
 # Other
 kodein = "7.11.0"
-ktor = "2.0.1"
+ktor = "2.0.2"
 
 # Logging
 logging-kermit = "1.1.2"
