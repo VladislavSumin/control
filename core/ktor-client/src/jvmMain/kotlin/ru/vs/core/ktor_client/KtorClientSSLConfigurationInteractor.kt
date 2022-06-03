@@ -1,9 +1,9 @@
 package ru.vs.core.ktor_client
 
+import ru.vs.core.utils.network.KeyStoreUtils
 import java.io.File
 import java.security.KeyStore
 import java.security.cert.Certificate
-import java.security.cert.CertificateFactory
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
@@ -20,12 +20,12 @@ interface KtorClientSSLConfigurationInteractor {
     )
 }
 
-// TODO так себе реализация, нужно что-то нормальное придумуть
+// TODO так себе реализация, нужно что-то нормальное придумать
 abstract class AbstractKtorClientSSLConfigurationInteractor : KtorClientSSLConfigurationInteractor {
     protected abstract fun getRootCAFile(): File
 
     override fun getSslConfiguration(): KtorClientSSLConfigurationInteractor.SSLConfiguration {
-        val certificate = readCertificate(getRootCAFile())
+        val certificate = KeyStoreUtils.readCertificate(getRootCAFile())
         val keyStore = createJks(certificate)
         val trustManager = getTrustManager(keyStore)
         val sslContext = getSslContext(trustManager)
@@ -49,11 +49,5 @@ abstract class AbstractKtorClientSSLConfigurationInteractor : KtorClientSSLConfi
         keyStore.load(null, null)
         keyStore.setCertificateEntry("ca", certificate)
         return keyStore
-    }
-
-    private fun readCertificate(file: File): Certificate {
-        return file.inputStream().use {
-            CertificateFactory.getInstance("X.509").generateCertificate(it)
-        }
     }
 }

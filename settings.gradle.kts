@@ -35,6 +35,7 @@ include(
     ":core:ktor-server",
     ":core:logging",
     ":core:logging-slf4j",
+    ":core:utils-network",
 )
 
 include(

@@ -6,6 +6,8 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import ru.vs.control.server.feature.proxy.web.ProxyModule
+import ru.vs.core.utils.network.KeyStoreUtils
+import java.io.File
 
 private const val SERVER_DEFAULT_PORT = 8080
 
@@ -23,6 +25,7 @@ class WebServerImpl(
             server.start(true)
         }
     }
+
     private fun CoroutineScope.createEnvironment(): ApplicationEngineEnvironment {
         return applicationEngineEnvironment {
             // Append parent coroutine context
@@ -31,6 +34,16 @@ class WebServerImpl(
             connector {
                 host = "0.0.0.0"
                 port = SERVER_DEFAULT_PORT
+            }
+
+            val keystore = KeyStoreUtils.readJks(
+                File("config/ssl/control.vs.pem"),
+                File("config/ssl/control.vs.crt"),
+                File("config/ssl/intermediate_ca.crt"),
+            )
+            sslConnector(keystore, "key", { "".toCharArray() }, { "".toCharArray() }) {
+                port = 8443
+                host = "0.0.0.0"
             }
 
             proxyModule.apply { install() }

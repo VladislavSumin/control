@@ -12,6 +12,7 @@ kotlin {
         }
         named("jvmMain") {
             dependencies {
+                api(project(":core:utils-network"))
                 api(libs.ktor.client.okhttp)
             }
         }
