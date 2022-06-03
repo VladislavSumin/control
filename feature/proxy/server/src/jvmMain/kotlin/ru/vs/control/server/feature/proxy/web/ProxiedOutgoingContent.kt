@@ -11,7 +11,14 @@ class ProxiedOutgoingContent(
     private val request: ApplicationRequest
 ) : OutgoingContent.WriteChannelContent() {
     override val headers: Headers = HeadersBuilder().run {
+        // TODO поискать zero copy решение
         appendAll(request.headers.filterContentTypeAndLength())
+
+        // java.io.EOFException: \n not found: limit=0 content=…
+        // https://javamana.com/2022/02/202202020336318130.html
+        // https://github.com/ktorio/ktor/issues/1708#issuecomment-609988128
+        append(HttpHeaders.Connection, "close")
+
         build()
     }
 
@@ -26,7 +33,6 @@ class ProxiedOutgoingContent(
         try {
             val i = request.receiveChannel().copyAndClose(channel)
             logger.v { "Written $i, content-length $contentLength" }
-            channel.flush()
             channel.close()
         } catch (e: Exception) {
             logger.w(e) { "Error on body write" }
@@ -39,7 +45,7 @@ class ProxiedOutgoingContent(
     }
 }
 
-private fun Headers.filterContentTypeAndLength() = filter { key, _ ->
+fun Headers.filterContentTypeAndLength() = filter { key, _ ->
     !key.equals(HttpHeaders.ContentType, ignoreCase = true)
             && !key.equals(HttpHeaders.ContentLength, ignoreCase = true)
 }
