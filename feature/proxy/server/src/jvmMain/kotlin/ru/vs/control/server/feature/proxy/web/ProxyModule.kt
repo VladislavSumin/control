@@ -2,18 +2,13 @@ package ru.vs.control.server.feature.proxy.web
 
 import co.touchlab.kermit.Logger
 import io.ktor.client.*
-import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import io.ktor.util.*
 import io.ktor.util.pipeline.*
-import io.ktor.utils.io.*
 import kotlinx.coroutines.launch
 import ru.vs.control.server.feature.proxy.domain.ProxyConfigurationInteractor
 
@@ -57,61 +52,23 @@ internal class ProxyModuleImpl(
     }
 
     private suspend fun PipelineContext<Unit, ApplicationCall>.proxy(url: String) {
-        val pipelineContext = this
+        val response = sendRequestToDestinationHost(url)
+            .onFailure { logger.w(it) { "Error while executing request" } }
+            .getOrThrow()
 
-        try {
-            val response = runCatching {
-                httpClient.request("$url${call.request.uri}") {
-                    method = pipelineContext.call.request.httpMethod
-                    setBody(ProxiedOutgoingContent(call.request))
-                }
+        runCatching {
+            call.respond(ProxiedOutgoingContentResponse(response))
+        }
+            .onFailure { logger.w(it) { "Error while executing response" } }
+            .getOrThrow()
+    }
+
+    private suspend fun PipelineContext<Unit, ApplicationCall>.sendRequestToDestinationHost(url: String): Result<HttpResponse> {
+        return runCatching {
+            httpClient.request("$url${call.request.uri}") {
+                method = call.request.httpMethod
+                setBody(ProxiedOutgoingContentRequest(call.request))
             }
-                .onFailure { logger.w(it) { "Error while executing request" } }
-                .getOrThrow()
-
-
-            val proxiedHeaders = response.headers
-            val contentType = proxiedHeaders[HttpHeaders.ContentType]
-            val contentLength = proxiedHeaders[HttpHeaders.ContentLength]
-
-
-            try {
-                call.respond(object : OutgoingContent.WriteChannelContent() {
-                    override val contentLength: Long? = contentLength?.toLong()
-                    override val contentType: ContentType? =
-                        contentType?.let { ContentType.parse(it) }
-                    override val headers: Headers = Headers.build {
-                        appendAll(proxiedHeaders.filter { key, _ ->
-                            !key.equals(HttpHeaders.ContentType, ignoreCase = true)
-                                    && !key.equals(HttpHeaders.ContentLength, ignoreCase = true)
-                                    && !key.equals(HttpHeaders.TransferEncoding, ignoreCase = true)
-                        })
-                    }
-                    override val status: HttpStatusCode? = response.status
-                    override suspend fun writeTo(channel: ByteWriteChannel) {
-                        response.bodyAsChannel().copyAndClose(channel)
-                        channel.close()
-                    }
-                })
-            } catch (e: Exception) {
-                println("AAAAAA + $e")
-                println(proxiedHeaders)
-            }
-        } catch (e: RedirectResponseException) {
-            //TODO тут нужно урл проверять
-//                        call.respondRedirect(
-//                            // смапил аки царь
-//                            e.response.headers.toMap()
-//                                .filter { it.key.contentEquals("Location", ignoreCase = true) }
-//                                .toList().first()!!.second[0]
-//                        )
-            println(e)
-        } catch (e: ClientRequestException) {
-            println("bbbbbbbbb")
-            call.respond(e.response.status)
-        } catch (e: Exception) {
-            println("aaa: $e")
-            throw RuntimeException(e)
         }
     }
 }
