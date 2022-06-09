@@ -4,6 +4,7 @@ import co.touchlab.kermit.Logger
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.request.*
@@ -38,15 +39,19 @@ internal class ProxyModuleImpl(
             }
 
             intercept(ApplicationCallPipeline.Call) {
-                logger.v {
-                    val request = call.request
-                    "Incoming ${request.httpMethod.value} request: ${request.host()}${request.uri}"
-                }
-                val requestedHost = call.request.host()
-                val redirectUrl = proxiedHosts[requestedHost]
+                val request = call.request
+                runCatching {
+                    logger.v { "Incoming ${request.httpMethod.value} request: ${request.host()}${request.uri}" }
+                    val requestedHost = call.request.host()
+                    val redirectUrl = proxiedHosts[requestedHost]
 
-                if (redirectUrl != null) proxy(redirectUrl)
-                else call.respondText("No proxy for host $requestedHost")
+                    if (redirectUrl != null) proxy(redirectUrl)
+                    else call.respondText("No proxy for host $requestedHost")
+                }
+                    .onFailure {
+                        logger.w(it) { "Error on process ${request.httpMethod.value} request: ${request.host()}${request.uri}" }
+                        call.respond(HttpStatusCode.InternalServerError)
+                    }
             }
         }
     }
