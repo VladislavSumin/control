@@ -57,23 +57,18 @@ internal class ProxyModuleImpl(
     }
 
     private suspend fun PipelineContext<Unit, ApplicationCall>.proxy(url: String) {
-        val response = sendRequestToDestinationHost(url)
-            .onFailure { logger.w(it) { "Error while executing request" } }
-            .getOrThrow()
-
-        runCatching {
-            call.respond(ProxiedOutgoingContentResponse(response))
+        if (call.request.headers[HttpHeaders.Connection]!!.equals("Upgrade", false)) {
+            throw RuntimeException("Web socket now unsupported")
         }
-            .onFailure { logger.w(it) { "Error while executing response" } }
-            .getOrThrow()
+
+        val response = sendRequestToDestinationHost(url)
+        call.respond(ProxiedOutgoingContentResponse(response))
     }
 
-    private suspend fun PipelineContext<Unit, ApplicationCall>.sendRequestToDestinationHost(url: String): Result<HttpResponse> {
-        return runCatching {
-            httpClient.request("$url${call.request.uri}") {
-                method = call.request.httpMethod
-                setBody(ProxiedOutgoingContentRequest(call.request))
-            }
+    private suspend fun PipelineContext<Unit, ApplicationCall>.sendRequestToDestinationHost(url: String): HttpResponse {
+        return httpClient.request("$url${call.request.uri}") {
+            method = call.request.httpMethod
+            setBody(ProxiedOutgoingContentRequest(call.request))
         }
     }
 }
