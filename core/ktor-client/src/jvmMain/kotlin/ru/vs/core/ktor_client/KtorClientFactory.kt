@@ -2,6 +2,7 @@ package ru.vs.core.ktor_client
 
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
+import io.ktor.client.plugins.websocket.*
 
 internal interface KtorClientFactory {
     fun createDefault(): HttpClient
@@ -20,6 +21,8 @@ class KtorClientFactoryImpl(
                         }
                 }
             }
+
+            install(WebSockets)
         }
     }
 }
