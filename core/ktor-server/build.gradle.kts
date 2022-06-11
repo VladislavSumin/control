@@ -7,6 +7,7 @@ kotlin {
         named("jvmMain") {
             dependencies {
                 api(libs.ktor.server.netty)
+                api(libs.ktor.server.websockets)
             }
         }
     }
