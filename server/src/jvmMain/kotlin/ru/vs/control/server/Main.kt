@@ -1,6 +1,7 @@
 package ru.vs.control.server
 
 import co.touchlab.kermit.Logger
+import io.sentry.Sentry
 import kotlinx.coroutines.launch
 import org.kodein.di.direct
 import org.kodein.di.instance
@@ -14,6 +15,12 @@ fun main() {
     Logger.setTag("server")
 
     Logger.i("Starting server")
+
+    Sentry.init { options ->
+        options.dsn = "https://2bad5747065c4d64b7cdfa70c64f80fc@o512687.ingest.sentry.io/6495152"
+        options.tracesSampleRate = 1.0
+        options.isDebug = true
+    }
 
     // Create server scope
     val serverScope = ServerScope(::closeLogger)

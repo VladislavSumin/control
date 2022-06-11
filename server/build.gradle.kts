@@ -13,6 +13,8 @@ kotlin {
                 implementation(project(":core:logging-slf4j"))
 
                 implementation(project(":feature:proxy:server"))
+
+                implementation(libs.sentry.core)
             }
         }
     }
