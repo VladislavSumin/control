@@ -34,9 +34,11 @@ include(
     ":core:crash-handler:impl",
     ":core:di",
     ":core:ktor-client",
+    ":core:ktor-network",
     ":core:ktor-server",
     ":core:logging",
     ":core:logging-slf4j",
+    ":core:mikrotik",
     ":core:sentry",
     ":core:utils-network",
 )
