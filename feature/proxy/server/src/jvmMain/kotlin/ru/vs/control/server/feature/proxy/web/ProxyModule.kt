@@ -20,6 +20,7 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import ru.vs.control.server.feature.proxy.domain.ProxyConfigurationInteractor
+import ru.vs.core.crash_handler.CrashHandler
 import java.io.EOFException
 
 interface ProxyModule {
@@ -28,6 +29,7 @@ interface ProxyModule {
 
 internal class ProxyModuleImpl(
     private val proxyConfigurationInteractor: ProxyConfigurationInteractor,
+    private val crashHandler: CrashHandler,
     defaultHttpClient: HttpClient
 ) : ProxyModule {
     private val httpClient = defaultHttpClient.config {
@@ -63,6 +65,7 @@ internal class ProxyModuleImpl(
                 }
                     .onFailure {
                         logger.w(it) { "Error on process ${request.httpMethod.value} request: ${request.host()}${request.uri}" }
+                        crashHandler.recordException(it)
                         call.respond(HttpStatusCode.InternalServerError)
                     }
             }
@@ -119,6 +122,7 @@ internal class ProxyModuleImpl(
             }
                 .onFailure {
                     logger.w("Error on ws", it)
+                    crashHandler.recordException(it)
                 }
         }
     }

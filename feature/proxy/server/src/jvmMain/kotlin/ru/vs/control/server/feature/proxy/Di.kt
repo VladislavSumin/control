@@ -11,5 +11,5 @@ import ru.vs.core.di.i
 
 fun Modules.featureProxy() = DI.Module("feature-proxy") {
     bindSingleton<ProxyConfigurationInteractor> { ProxyConfigurationInteractorImpl() }
-    bindSingleton<ProxyModule> { ProxyModuleImpl(i(), i()) }
+    bindSingleton<ProxyModule> { ProxyModuleImpl(i(), i(), i()) }
 }
