@@ -9,13 +9,7 @@ interface DispatchersProvider {
     val Main: MainCoroutineDispatcher
     val Default: CoroutineDispatcher
     val Unconfined: CoroutineDispatcher
+    val IO: CoroutineDispatcher
 }
 
-internal class DispatchersProviderImpl : DispatchersProvider {
-    override val Main: MainCoroutineDispatcher
-        get() = Dispatchers.Main
-    override val Default: CoroutineDispatcher
-        get() = Dispatchers.Default
-    override val Unconfined: CoroutineDispatcher
-        get() = Dispatchers.Unconfined
-}
+internal  expect class DispatchersProviderImpl() : DispatchersProvider
