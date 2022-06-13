@@ -7,6 +7,7 @@ kotlin {
         named("commonMain") {
             dependencies {
                 api(libs.kotlin.coroutines.core)
+                implementation(project(":core:di"))
             }
         }
     }
