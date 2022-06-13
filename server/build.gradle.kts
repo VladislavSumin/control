@@ -13,6 +13,7 @@ kotlin {
                 implementation(project(":core:logging-slf4j"))
                 implementation(project(":core:sentry"))
 
+                implementation(project(":feature:dns-sync:server"))
                 implementation(project(":feature:proxy:server"))
 
             }

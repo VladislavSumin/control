@@ -2,6 +2,7 @@ package ru.vs.control.server
 
 import org.kodein.di.DI
 import org.kodein.di.bindSingleton
+import ru.vs.control.server.feature.dns_sync.featureDnsSync
 import ru.vs.control.server.feature.proxy.featureProxy
 import ru.vs.control.server.web.KtorClientSSLConfigurationInteractorImpl
 import ru.vs.control.server.web.WebServer
@@ -20,6 +21,7 @@ fun createDiGraph() = DI {
     importOnce(Modules.coreSentry())
 
     // Feature modules
+    importOnce(Modules.featureDnsSync())
     importOnce(Modules.featureProxy())
 
     // Repositories

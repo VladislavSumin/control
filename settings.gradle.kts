@@ -44,6 +44,7 @@ include(
 )
 
 include(
+    ":feature:dns-sync:server",
     ":feature:proxy:server",
 )
 
