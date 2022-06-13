@@ -19,7 +19,6 @@ fun main() {
     Sentry.init { options ->
         options.dsn = "https://2bad5747065c4d64b7cdfa70c64f80fc@o512687.ingest.sentry.io/6495152"
         options.tracesSampleRate = 1.0
-        options.isDebug = true
     }
 
     // Create server scope

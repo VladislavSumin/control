@@ -11,10 +11,10 @@ kotlin {
                 implementation(project(":core:ktor-client"))
                 implementation(project(":core:ktor-server"))
                 implementation(project(":core:logging-slf4j"))
+                implementation(project(":core:sentry"))
 
                 implementation(project(":feature:proxy:server"))
 
-                implementation(libs.sentry.core)
             }
         }
     }

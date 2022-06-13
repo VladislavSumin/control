@@ -13,6 +13,7 @@ kotlin {
         named("jvmMain") {
             dependencies {
                 implementation(project(":core:coroutines"))
+                implementation(project(":core:crash-handler:api"))
                 implementation(project(":core:di"))
                 implementation(project(":core:ktor-server"))
                 implementation(project(":core:logging"))
