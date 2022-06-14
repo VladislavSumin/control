@@ -12,12 +12,16 @@ import ru.vs.core.di.Modules
 import ru.vs.core.di.i
 import ru.vs.core.ktor_client.KtorClientSSLConfigurationInteractor
 import ru.vs.core.ktor_client.coreKtorClient
+import ru.vs.core.ktor_network.coreKtorNetwork
+import ru.vs.core.mikrotik.coreMikrotik
 import ru.vs.core.sentry.coreSentry
 
 fun createDiGraph() = DI {
     // Core modules
     importOnce(Modules.coreCoroutines())
     importOnce(Modules.coreKtorClient())
+    importOnce(Modules.coreKtorNetwork())
+    importOnce(Modules.coreMikrotik())
     importOnce(Modules.coreSentry())
 
     // Feature modules

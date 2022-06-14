@@ -8,6 +8,7 @@ kotlin {
             dependencies {
                 implementation(project(":core:di"))
                 implementation(project(":core:ktor-network"))
+                implementation(project(":core:logging"))
             }
         }
     }
