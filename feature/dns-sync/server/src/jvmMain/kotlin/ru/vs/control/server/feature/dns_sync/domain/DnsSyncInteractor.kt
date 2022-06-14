@@ -2,24 +2,30 @@ package ru.vs.control.server.feature.dns_sync.domain
 
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import ru.vs.control.server.feature.dns_sync.repository.DnsServer
+import ru.vs.control.server.feature.dns_sync.repository.DnsServersRepository
 import ru.vs.core.mikrotik.MikrotikClient
+import ru.vs.core.mikrotik.connection.MikrotikConnection
 
 interface DnsSyncInteractor {
     suspend fun init()
 }
 
 internal class DnsSyncInteractorImpl(
+    private val serversRepository: DnsServersRepository,
     private val mikrotikClient: MikrotikClient,
 //    private val scope: CoroutineScope
 ) : DnsSyncInteractor {
     override suspend fun init() = withContext(CoroutineName("DnsSyncInteractor#init")) {
         logger.i("Init DnsSync feature")
 
-        // Test piece of code
-        logger.i("Connecting to 10.255.255.2")
-        mikrotikClient.connect("10.255.255.2", username = "admin", password = "") {
-
+        val servers = serversRepository.observeDnsServers().first()
+        servers.forEach { server ->
+            mikrotikClient.connect(server) {
+                // TODO()
+            }
         }
     }
 
@@ -27,3 +33,6 @@ internal class DnsSyncInteractorImpl(
         private val logger = Logger.withTag("DnsSync")
     }
 }
+
+private suspend fun MikrotikClient.connect(server: DnsServer, action: MikrotikConnection.() -> Unit) =
+    connect(server.host, server.port, server.login, server.password(), action)
