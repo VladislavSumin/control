@@ -1,4 +1,4 @@
-package ru.vs.core.mikrotik
+package ru.vs.core.mikrotik.message
 
 internal data class ClientMessage(
     val command: String,

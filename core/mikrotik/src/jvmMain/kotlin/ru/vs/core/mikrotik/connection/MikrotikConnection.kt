@@ -1,7 +1,7 @@
 package ru.vs.core.mikrotik.connection
 
 import io.ktor.network.sockets.*
-import ru.vs.core.mikrotik.ClientMessage
+import ru.vs.core.mikrotik.message.ClientMessage
 
 
 interface MikrotikConnection {
@@ -20,6 +20,6 @@ internal class MikrotikConnectionImpl(
 
     private suspend fun execute(message: ClientMessage) {
         output.writeClientMessage(message)
-        println(input.readWord())
+        println(input.readServerMessage())
     }
 }

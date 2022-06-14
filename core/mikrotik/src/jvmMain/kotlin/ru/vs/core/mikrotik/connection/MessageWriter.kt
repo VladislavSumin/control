@@ -1,7 +1,7 @@
 package ru.vs.core.mikrotik.connection
 
 import io.ktor.utils.io.*
-import ru.vs.core.mikrotik.ClientMessage
+import ru.vs.core.mikrotik.message.ClientMessage
 
 internal class MessageWriter(
     private val output: ByteWriteChannel
