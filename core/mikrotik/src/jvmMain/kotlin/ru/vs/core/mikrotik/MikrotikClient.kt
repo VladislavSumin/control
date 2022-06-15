@@ -15,7 +15,7 @@ interface MikrotikClient {
     suspend fun connect(
         hostname: String, port: Int = DEFAULT_PORT,
         username: String, password: String,
-        action: MikrotikConnection.() -> Unit
+        action: suspend MikrotikConnection.() -> Unit
     )
 }
 
@@ -27,7 +27,7 @@ internal class MikrotikClientImpl(
         port: Int,
         username: String,
         password: String,
-        action: MikrotikConnection.() -> Unit
+        action: suspend MikrotikConnection.() -> Unit
     ) {
         val name = "$username@$hostname:$port"
         withContext(CoroutineName("MC connection $name")) {

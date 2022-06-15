@@ -24,7 +24,7 @@ internal class DnsSyncInteractorImpl(
         val servers = serversRepository.observeDnsServers().first()
         servers.forEach { server ->
             mikrotikClient.connect(server) {
-                // TODO()
+                execute("/ip/dns/static/print")
             }
         }
     }
@@ -34,5 +34,5 @@ internal class DnsSyncInteractorImpl(
     }
 }
 
-private suspend fun MikrotikClient.connect(server: DnsServer, action: MikrotikConnection.() -> Unit) =
+private suspend fun MikrotikClient.connect(server: DnsServer, action: suspend MikrotikConnection.() -> Unit) =
     connect(server.host, server.port, server.login, server.password(), action)
