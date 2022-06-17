@@ -1,6 +1,6 @@
 [versions]
 # Kotlin
-kotlin-core = "1.6.10"
+kotlin-core = "1.7.0"
 kotlin-coroutines = "1.6.1"
 
 # Other
