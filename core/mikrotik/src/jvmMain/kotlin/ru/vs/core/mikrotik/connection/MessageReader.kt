@@ -2,6 +2,7 @@ package ru.vs.core.mikrotik.connection
 
 import io.ktor.util.*
 import io.ktor.utils.io.*
+import kotlinx.coroutines.flow.flow
 import ru.vs.core.mikrotik.message.ServerMessage
 import java.nio.ByteBuffer
 
@@ -64,4 +65,6 @@ internal class MessageReader(
         }
         return len
     }
+
+    fun asFlow() = flow { while (true) emit(readServerMessage()) }
 }
