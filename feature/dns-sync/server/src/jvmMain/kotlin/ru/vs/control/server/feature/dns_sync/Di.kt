@@ -10,6 +10,6 @@ import ru.vs.core.di.Modules
 import ru.vs.core.di.i
 
 fun Modules.featureDnsSync() = DI.Module("core-dns-sync") {
-    bindSingleton<DnsServersRepository> { DnsServersRepositoryImpl() }
+    bindSingleton<DnsServersRepository> { DnsServersRepositoryImpl(i()) }
     bindSingleton<DnsSyncInteractor> { DnsSyncInteractorImpl(i(), i()) }
 }

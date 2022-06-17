@@ -5,4 +5,6 @@ internal data class DnsServer(
     val port: Int = 8728,
     val login: String,
     val password: () -> String
-)
+) {
+    companion object
+}
