@@ -4,6 +4,7 @@ import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
     id("ru.vs.convention.multiplatform.jvm")
+    id("ru.vs.convention.multiplatform.serialization")
 }
 
 val libs = the<LibrariesForLibs>()
@@ -17,6 +18,7 @@ kotlin {
                 implementation(project(":core:di"))
                 implementation(project(":core:ktor-server"))
                 implementation(project(":core:logging"))
+                implementation(project(":core:serialization"))
             }
         }
     }
