@@ -24,7 +24,7 @@ internal class DnsSyncInteractorImpl(
         val servers = serversRepository.observeDnsServers().first()
         servers.forEach { server ->
             mikrotikClient.connect(server) {
-                println(execute("/ip/dns/static/print"))
+                println(dsl.ip.dns.static.print())
             }
         }
     }

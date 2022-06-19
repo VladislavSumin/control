@@ -5,12 +5,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.flow.toList
+import ru.vs.core.mikrotik.dsl.MikrotikDsl
 import ru.vs.core.mikrotik.message.ClientMessage
 import ru.vs.core.mikrotik.message.ServerMessage
 import ru.vs.core.mikrotik.message.fromString
 
 
 interface MikrotikConnection {
+    val dsl: MikrotikDsl
     suspend fun execute(command: String): List<Map<String, String>>
 }
 
@@ -20,6 +22,8 @@ internal class MikrotikConnectionImpl(
 
     private val input = MessageReader(socket.openReadChannel())
     private val output = MessageWriter(socket.openWriteChannel())
+
+    override val dsl: MikrotikDsl = MikrotikDsl()
 
     override suspend fun execute(command: String): List<Map<String, String>> {
         return execute(ClientMessage.fromString(command))

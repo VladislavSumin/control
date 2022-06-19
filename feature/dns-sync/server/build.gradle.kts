@@ -1,5 +1,6 @@
 plugins {
     id("ru.vs.convention.feature.server")
+    id("ru.vs.convention.kotlin.context-receivers")
 }
 
 kotlin {
