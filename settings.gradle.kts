@@ -40,6 +40,7 @@ include(
     ":core:logging-slf4j",
     ":core:mikrotik",
     ":core:sentry",
+    ":core:serialization",
     ":core:utils-network",
 )
 
