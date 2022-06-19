@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        named("jvmMain") {
+        named("commonMain") {
             dependencies {
                 api(libs.ktor.server.netty)
                 api(libs.ktor.server.websockets)

@@ -1,20 +1,20 @@
 [versions]
 # Kotlin
-kotlin-core = "1.6.10" # 1.7.0 broke idea classpath
+kotlin-core = "1.7.0"
 kotlin-coroutines = "1.6.2"
 
 # Other
-kodein = "7.11.0"
+kodein = "7.12.0"
 ktor = "2.0.2"
-sentry = "6.0.0"
+sentry = "6.1.1"
 
 # Gradle plugins
 gradlePlugins-checkUpdates = "0.39.0"
 
 # Logging
 logging-kermit = "1.1.2"
-logging-log4j = "2.17.1"
-logging-slf4j = "1.7.35"
+logging-log4j = "2.17.2"
+logging-slf4j = "1.7.36"
 
 
 [libraries]

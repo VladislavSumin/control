@@ -6,13 +6,14 @@ kotlin {
     sourceSets {
         named("commonMain") {
             dependencies {
-                implementation(project(":core:di"))
+                api(project(":core:utils-network"))
                 api(libs.ktor.client.core)
+
+                implementation(project(":core:di"))
             }
         }
         named("jvmMain") {
             dependencies {
-                api(project(":core:utils-network"))
                 api(libs.ktor.client.okhttp)
             }
         }

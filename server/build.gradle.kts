@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        named("jvmMain") {
+        named("commonMain") {
             dependencies {
                 implementation(project(":core:coroutines"))
                 implementation(project(":core:di"))
@@ -17,7 +17,6 @@ kotlin {
 
                 implementation(project(":feature:dns-sync:server"))
                 implementation(project(":feature:proxy:server"))
-
             }
         }
     }

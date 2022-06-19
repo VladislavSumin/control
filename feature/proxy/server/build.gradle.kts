@@ -4,10 +4,9 @@ plugins {
 
 kotlin {
     sourceSets {
-        named("jvmMain") {
+        named("commonMain") {
             dependencies {
                 implementation(project(":core:ktor-client"))
-                implementation("io.ktor:ktor-network-tls-certificates:${libs.versions.ktor.get()}")
             }
         }
     }

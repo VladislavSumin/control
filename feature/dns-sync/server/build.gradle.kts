@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        named("jvmMain") {
+        named("commonMain") {
             dependencies {
                 implementation(project(":core:mikrotik"))
             }

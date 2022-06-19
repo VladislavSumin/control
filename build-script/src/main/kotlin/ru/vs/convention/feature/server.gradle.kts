@@ -10,7 +10,7 @@ val libs = the<LibrariesForLibs>()
 
 kotlin {
     sourceSets {
-        named("jvmMain") {
+        named("commonMain") {
             dependencies {
                 implementation(project(":core:coroutines"))
                 implementation(project(":core:crash-handler:api"))
