@@ -9,7 +9,7 @@ ktor = "2.0.2"
 sentry = "6.1.1"
 
 # Gradle plugins
-gradlePlugins-checkUpdates = "0.39.0"
+gradlePlugins-checkUpdates = "0.42.0"
 
 # Logging
 logging-kermit = "1.1.2"
