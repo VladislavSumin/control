@@ -15,6 +15,7 @@ kotlin {
                 implementation(project(":core:logging-slf4j"))
                 implementation(project(":core:mikrotik"))
                 implementation(project(":core:sentry"))
+                implementation(project(":core:serialization"))
 
                 implementation(project(":feature:dns-sync:server"))
                 implementation(project(":feature:proxy:server"))

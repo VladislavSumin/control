@@ -3,9 +3,11 @@ package ru.vs.core.mikrotik
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import ru.vs.core.ktor_network.SocketFactory
 import ru.vs.core.mikrotik.connection.MikrotikConnection
 import ru.vs.core.mikrotik.connection.MikrotikConnectionImpl
+import ru.vs.core.mikrotik.connection.MikrotikConnectionInternal
 
 interface MikrotikClient {
     companion object {
@@ -20,7 +22,8 @@ interface MikrotikClient {
 }
 
 internal class MikrotikClientImpl(
-    private val socketFactory: SocketFactory
+    private val socketFactory: SocketFactory,
+    private val json: Json,
 ) : MikrotikClient {
     override suspend fun connect(
         hostname: String,
@@ -34,7 +37,7 @@ internal class MikrotikClientImpl(
             logger.d { "Connecting to $name" }
             socketFactory.aSocket().tcp().connect(hostname, port).use { socket ->
                 logger.v { "Connection with $name established" }
-                val clientConnection = MikrotikConnectionImpl(socket)
+                val clientConnection: MikrotikConnectionInternal = MikrotikConnectionImpl(socket, json)
                 clientConnection.login(username, password)
                 clientConnection.action()
             }

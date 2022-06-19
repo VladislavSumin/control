@@ -15,6 +15,7 @@ import ru.vs.core.ktor_client.coreKtorClient
 import ru.vs.core.ktor_network.coreKtorNetwork
 import ru.vs.core.mikrotik.coreMikrotik
 import ru.vs.core.sentry.coreSentry
+import ru.vs.core.serialization.coreSerialization
 
 fun createDiGraph() = DI {
     // Core modules
@@ -23,6 +24,7 @@ fun createDiGraph() = DI {
     importOnce(Modules.coreKtorNetwork())
     importOnce(Modules.coreMikrotik())
     importOnce(Modules.coreSentry())
+    importOnce(Modules.coreSerialization())
 
     // Feature modules
     importOnce(Modules.featureDnsSync())

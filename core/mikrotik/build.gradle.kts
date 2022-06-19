@@ -1,5 +1,6 @@
 plugins {
     id("ru.vs.convention.multiplatform.jvm")
+    id("ru.vs.convention.multiplatform.serialization")
     id("ru.vs.convention.kotlin.context-receivers")
 }
 
@@ -10,6 +11,7 @@ kotlin {
                 implementation(project(":core:di"))
                 implementation(project(":core:ktor-network"))
                 implementation(project(":core:logging"))
+                implementation(project(":core:serialization"))
             }
         }
     }

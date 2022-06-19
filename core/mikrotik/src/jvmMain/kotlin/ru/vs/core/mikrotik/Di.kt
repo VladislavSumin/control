@@ -6,6 +6,6 @@ import ru.vs.core.di.Modules
 import ru.vs.core.di.i
 
 fun Modules.coreMikrotik() = DI.Module("core-mikrotik") {
-    bindSingleton<MikrotikClientFactory> { MikrotikClientFactoryImpl(i()) }
+    bindSingleton<MikrotikClientFactory> { MikrotikClientFactoryImpl(i(), i()) }
     bindSingleton { i<MikrotikClientFactory>().createMikrotikClient() }
 }
