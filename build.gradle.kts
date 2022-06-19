@@ -1,3 +1,3 @@
 plugins {
-    id("ru.vs.empty_plugin")
+    id("ru.vs.convention.check-updates")
 }

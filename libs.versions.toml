@@ -8,6 +8,9 @@ kodein = "7.11.0"
 ktor = "2.0.2"
 sentry = "6.0.0"
 
+# Gradle plugins
+gradlePlugins-checkUpdates = "0.39.0"
+
 # Logging
 logging-kermit = "1.1.2"
 logging-log4j = "2.17.1"
@@ -17,6 +20,7 @@ logging-slf4j = "1.7.35"
 [libraries]
 # Plugins
 gradlePlugins-kotlin-core = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-core" }
+gradlePlugins-checkUpdates = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "gradlePlugins-checkUpdates" }
 
 # Kotlin
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
