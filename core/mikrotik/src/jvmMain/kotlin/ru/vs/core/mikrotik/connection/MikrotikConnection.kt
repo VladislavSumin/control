@@ -19,11 +19,13 @@ import kotlin.reflect.typeOf
 interface MikrotikConnection {
     val dsl: MikrotikDsl
     suspend fun executeRaw(command: String): List<Map<String, String>>
+    suspend fun executeUnit(command: String)
     suspend fun <T : Any> execute(command: String, type: KType): List<T>
 }
 
 internal interface MikrotikConnectionInternal : MikrotikConnection {
     suspend fun executeRaw(message: ClientMessage): List<Map<String, String>>
+    suspend fun executeUnit(message: ClientMessage)
     suspend fun <T : Any> execute(message: ClientMessage, type: KType): List<T>
     suspend fun login(username: String, password: String)
 }
@@ -50,6 +52,14 @@ internal class MikrotikConnectionImpl(
 
     override suspend fun login(username: String, password: String) {
         executeRaw(ClientMessage("/login", mapOf("name" to username, "password" to password)))
+    }
+
+    override suspend fun executeUnit(command: String) {
+        return executeUnit(ClientMessage.fromString(command))
+    }
+
+    override suspend fun executeUnit(message: ClientMessage) {
+        if (executeRaw(message).isNotEmpty()) throw IllegalStateException("Commend return data")
     }
 
     override suspend fun <T : Any> execute(command: String, type: KType): List<T> {

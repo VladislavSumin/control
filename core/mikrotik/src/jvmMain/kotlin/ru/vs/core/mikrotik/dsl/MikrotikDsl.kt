@@ -15,5 +15,4 @@ context(MikrotikConnectionInternal)
 @Suppress("ClassName")
 class MikrotikDsl internal constructor() : MikrotikDslAbstract(null, "/") {
     val ip = MikrotikDslIp(this)
-
 }
