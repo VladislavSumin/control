@@ -50,3 +50,4 @@ include(
 )
 
 include(":server")
+include(":client:terminal")

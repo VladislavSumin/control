@@ -9,6 +9,7 @@ dependencies {
 
     implementation(libs.gradlePlugins.kotlin.core)
     implementation(libs.gradlePlugins.kotlin.serialization)
+    implementation(libs.gradlePlugins.mosaic)
     implementation(libs.gradlePlugins.checkUpdates)
 }
 
