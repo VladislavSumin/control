@@ -4,6 +4,8 @@ import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import ru.vs.control.server.feature.dns_sync.repository.DnsRecord
+import ru.vs.control.server.feature.dns_sync.repository.DnsRecordsRepository
 import ru.vs.control.server.feature.dns_sync.repository.DnsServer
 import ru.vs.control.server.feature.dns_sync.repository.DnsServersRepository
 import ru.vs.core.mikrotik.MikrotikClient
@@ -15,6 +17,7 @@ interface DnsSyncInteractor {
 
 internal class DnsSyncInteractorImpl(
     private val serversRepository: DnsServersRepository,
+    private val dnsRecordsRepository: DnsRecordsRepository,
     private val mikrotikClient: MikrotikClient,
 //    private val scope: CoroutineScope
 ) : DnsSyncInteractor {
@@ -22,6 +25,7 @@ internal class DnsSyncInteractorImpl(
         logger.i("Init DnsSync feature")
 
         val servers = serversRepository.observeDnsServers().first()
+        val dnsRecords = dnsRecordsRepository.observeDnsRecords().first()
         servers.forEach { server ->
             mikrotikClient.connect(server) {
                 println(dsl.ip.dns.static.print())
