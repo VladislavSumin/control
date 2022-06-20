@@ -39,7 +39,7 @@ fun main() {
         di.direct.instance<DnsSyncInteractor>().init()
 
         // Start web server (blocking)
-        di.direct.instance<WebServer>().run()
+        // di.direct.instance<WebServer>().run()
     }
 
     // coroutines use daemon thread, we must keep main thread alive
