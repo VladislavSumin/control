@@ -11,5 +11,6 @@ data class MikrotikDnsRecord(
     val address: String, //InetAddress,
     val ttl: String, //Duration,
     val dynamic: Boolean,
-    val disabled: Boolean
+    val disabled: Boolean,
+    val comment: String = "",
 )
