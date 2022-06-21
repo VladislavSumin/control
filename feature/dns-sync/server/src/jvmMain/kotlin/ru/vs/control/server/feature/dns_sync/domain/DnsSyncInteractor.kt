@@ -41,7 +41,7 @@ internal class DnsSyncInteractorImpl(
 
             // Step 1: Remove old records
             val toRemove = remoteRecords.filter { it.name !in dnsRecordNames }
-            logger.d { "Found ${toRemove.size} records to remove: ${toRemove.map { it.name }}" }
+            logger.d { "Found ${toRemove.size} records to remove: ${toRemove.map { "${it.id} ${it.name}" }}" }
             toRemove.forEach { dsl.ip.dns.static.remove(it) }
 
             // Step 2: Add new records
@@ -55,20 +55,27 @@ internal class DnsSyncInteractorImpl(
                         comment = COMMENT
                     )
                 }
-            logger.d { "Found ${toAdd.size} records to add: ${toAdd.map { it.name }}" }
+            logger.d { "Found ${toAdd.size} records to add: ${toAdd.map { "${it.id} ${it.name}" }}" }
             toAdd.forEach { dsl.ip.dns.static.add(it) }
 
-            // Step 3: TODO
-//            val toModify = remoteRecords.filter { remoteRecord ->
-//                val localRecord = dnsRecords.find { it.host == remoteRecord.name } ?: return@filter false
-//                remoteRecord.name != localRecord.host || remoteRecord.address != localRecord.ip
-//            }
-//
-//            println("Remove: $toRemove")
-//            println("Add: $toAdd")
-//            println("Modify: $toModify")
-//
-//            println(remoteRecords)
+            // Step 3: Modify changed records
+            val toModify = remoteRecords
+                .mapNotNull { remoteRecord ->
+                    val localRecord = dnsRecords.find { it.host == remoteRecord.name } ?: return@mapNotNull null
+                    if (remoteRecord.name == localRecord.host && remoteRecord.address == localRecord.ip) return@mapNotNull null
+                    remoteRecord.id to localRecord
+                }
+                .map { (id, record) ->
+                    MikrotikDnsRecord(
+                        id = id,
+                        name = record.host,
+                        address = record.ip,
+                        ttl = "1d",
+                        comment = COMMENT
+                    )
+                }
+            logger.d { "Found ${toAdd.size} records to modify: ${toModify.map { "${it.id} ${it.name}" }}" }
+            toModify.forEach { dsl.ip.dns.static.set(it) }
         }
     }
 

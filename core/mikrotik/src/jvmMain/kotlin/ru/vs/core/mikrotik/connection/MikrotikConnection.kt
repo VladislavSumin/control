@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import ru.vs.core.mikrotik.MikrotikTrapException
 import ru.vs.core.mikrotik.dsl.MikrotikDsl
 import ru.vs.core.mikrotik.message.ClientMessage
 import ru.vs.core.mikrotik.message.ServerMessage
@@ -85,7 +86,7 @@ internal class MikrotikConnectionImpl(
             .takeWhile { it.result != ServerMessage.Result.done }
             // TODO add custom exceptions
             .onEach { if (it.result == ServerMessage.Result.fatal) throw RuntimeException("server return fatal") }
-            .onEach { if (it.result == ServerMessage.Result.trap) throw RuntimeException("server return trap") }
+            .onEach { if (it.result == ServerMessage.Result.trap) throw MikrotikTrapException(it.data["message"]!!) }
             .map { it.data }
             .toList()
     }

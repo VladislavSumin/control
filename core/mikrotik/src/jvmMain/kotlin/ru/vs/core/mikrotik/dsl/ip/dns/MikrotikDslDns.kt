@@ -35,5 +35,20 @@ class MikrotikDslDns internal constructor(parent: MikrotikDslAbstract?) : Mikrot
                 )
             )
         }
+
+        suspend fun set(record: MikrotikDnsRecord) {
+            executeUnit(
+                ClientMessage(
+                    path + "set",
+                    mapOf(
+                        "numbers" to record.id.id,
+                        "name" to record.name,
+                        "address" to record.address,
+                        "ttl" to record.ttl,
+                        "comment" to record.comment
+                    )
+                )
+            )
+        }
     }
 }
