@@ -20,5 +20,20 @@ class MikrotikDslDns internal constructor(parent: MikrotikDslAbstract?) : Mikrot
         suspend fun remove(id: MikrotikId) {
             executeUnit(ClientMessage(path + "remove", mapOf("numbers" to id.id)))
         }
+
+        suspend fun add(record: MikrotikDnsRecord) {
+            executeUnit(
+                ClientMessage(
+                    path + "add",
+                    mapOf(
+                        "name" to record.name,
+                        "address" to record.address,
+                        "ttl" to record.ttl,
+                        "disabled" to record.disabled.toString(),
+                        "comment" to record.comment
+                    )
+                )
+            )
+        }
     }
 }

@@ -7,11 +7,11 @@ import ru.vs.core.mikrotik.dsl.MikrotikId
 @Serializable
 data class MikrotikDnsRecord(
     @SerialName(".id")
-    val id: MikrotikId,
+    val id: MikrotikId = MikrotikId("<new>"),
     val name: String,
     val address: String, //InetAddress,
-    val ttl: String, //Duration,
-    val dynamic: Boolean,
-    val disabled: Boolean,
+    val ttl: String = "1d", //Duration,
+    val dynamic: Boolean = false,
+    val disabled: Boolean = false,
     val comment: String = "",
 )

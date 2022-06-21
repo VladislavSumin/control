@@ -10,6 +10,8 @@ import ru.vs.control.server.feature.dns_sync.repository.DnsServer
 import ru.vs.control.server.feature.dns_sync.repository.DnsServersRepository
 import ru.vs.core.mikrotik.MikrotikClient
 import ru.vs.core.mikrotik.connection.MikrotikConnection
+import ru.vs.core.mikrotik.dsl.MikrotikId
+import ru.vs.core.mikrotik.dsl.ip.dns.MikrotikDnsRecord
 
 interface DnsSyncInteractor {
     suspend fun init()
@@ -40,10 +42,23 @@ internal class DnsSyncInteractorImpl(
             // Step 1: Remove old records
             val toRemove = remoteRecords.filter { it.name !in dnsRecordNames }
             logger.d { "Found ${toRemove.size} records to remove: ${toRemove.map { it.name }}" }
-            toRemove.forEach { println(dsl.ip.dns.static.remove(it)) }
+            toRemove.forEach { dsl.ip.dns.static.remove(it) }
 
-            // Step 2: TODO
-//            val toAdd = dnsRecords.filter { it.host !in remoteRecordsNames }
+            // Step 2: Add new records
+            val toAdd = dnsRecords
+                .filter { it.host !in remoteRecordsNames }
+                .map {
+                    MikrotikDnsRecord(
+                        name = it.host,
+                        address = it.ip,
+                        ttl = "1d",
+                        comment = COMMENT
+                    )
+                }
+            logger.d { "Found ${toAdd.size} records to add: ${toAdd.map { it.name }}" }
+            toAdd.forEach { dsl.ip.dns.static.add(it) }
+
+            // Step 3: TODO
 //            val toModify = remoteRecords.filter { remoteRecord ->
 //                val localRecord = dnsRecords.find { it.host == remoteRecord.name } ?: return@filter false
 //                remoteRecord.name != localRecord.host || remoteRecord.address != localRecord.ip
