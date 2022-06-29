@@ -6,6 +6,7 @@ kotlin {
     sourceSets {
         named("commonMain") {
             dependencies {
+                implementation(project(":core:acme:server:ktor"))
                 implementation(project(":core:coroutines"))
                 implementation(project(":core:di"))
                 implementation(project(":core:ktor-client"))
@@ -14,6 +15,8 @@ kotlin {
                 implementation(project(":core:logging-slf4j"))
                 implementation(project(":core:serialization"))
                 implementation(libs.ktor.server.callLogging)
+                implementation(libs.ktor.server.contentNegotiation)
+                implementation(libs.ktor.serialization.json)
             }
         }
     }
