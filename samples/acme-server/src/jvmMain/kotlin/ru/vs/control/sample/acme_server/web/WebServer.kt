@@ -6,16 +6,12 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
-import ru.vs.core.acme.model.AcmeDirectory
-import ru.vs.core.acme.model.createDefault
+import ru.vs.core.acme.web.acme
 import ru.vs.core.utils.network.KeyStoreUtils
 import java.io.File
-import java.net.URL
 
 private const val SERVER_DEFAULT_PORT = 8080
 
@@ -52,27 +48,17 @@ class WebServerImpl() : WebServer {
                 host = "0.0.0.0"
             }
 
-            module { acme() }
-
-//            proxyModule.apply { install() }
+            module { setup() }
         }
     }
 
-    private fun Application.acme() {
+    private fun Application.setup() {
         install(CallLogging)
         install(ContentNegotiation) {
             json()
         }
 
-        routing {
-            get("acme") {
-                val directory = AcmeDirectory.createDefault(URL("https://ca.control.vs:8443/acme"))
-                call.respond(directory)
-            }
-            head("acme/newNonce") {
-                println(this)
-            }
-        }
+        acme("https://ca.control.vs:8443")
     }
 
     private fun createEmbeddedServer(environment: ApplicationEngineEnvironment): ApplicationEngine =

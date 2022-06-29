@@ -30,8 +30,7 @@ rootProject.name = "control"
 
 include(
     ":core:acme:core",
-    ":core:acme:server:core",
-    ":core:acme:server:ktor",
+    ":core:acme:server",
     ":core:coroutines",
     ":core:crash-handler:api",
     ":core:crash-handler:impl",

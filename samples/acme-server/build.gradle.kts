@@ -6,7 +6,7 @@ kotlin {
     sourceSets {
         named("commonMain") {
             dependencies {
-                implementation(project(":core:acme:server:ktor"))
+                implementation(project(":core:acme:server"))
                 implementation(project(":core:coroutines"))
                 implementation(project(":core:di"))
                 implementation(project(":core:ktor-client"))
