@@ -50,3 +50,5 @@ include(
 )
 
 include(":server")
+
+include(":samples:acme-server")
