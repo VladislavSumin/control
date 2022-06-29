@@ -13,6 +13,7 @@ kotlin {
                 implementation(project(":core:ktor-server"))
                 implementation(project(":core:logging-slf4j"))
                 implementation(project(":core:serialization"))
+                implementation(libs.ktor.server.callLogging)
             }
         }
     }

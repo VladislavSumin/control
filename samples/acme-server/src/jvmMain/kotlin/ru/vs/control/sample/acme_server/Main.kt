@@ -5,6 +5,7 @@ import kotlinx.coroutines.DEBUG_PROPERTY_NAME
 import kotlinx.coroutines.launch
 import org.kodein.di.direct
 import org.kodein.di.instance
+import ru.vs.control.sample.acme_server.web.WebServer
 import ru.vs.core.coroutines.ServerScope
 import ru.vs.core.logging.setupDefault
 import ru.vs.core.logging.shutdown
@@ -22,12 +23,12 @@ fun main() {
     // Create server scope
     val serverScope = ServerScope(::closeLogger)
 
+    val di = createDiGraph()
 
     serverScope.launch {
-        // Init services
 
         // Start web server (blocking)
-        // di.direct.instance<WebServer>().run()
+        di.direct.instance<WebServer>().run()
     }
 
     // coroutines use daemon thread, we must keep main thread alive
