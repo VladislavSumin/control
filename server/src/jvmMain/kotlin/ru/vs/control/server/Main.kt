@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import org.kodein.di.direct
 import org.kodein.di.instance
 import ru.vs.control.server.feature.dns_sync.domain.DnsSyncInteractor
-import ru.vs.control.server.web.WebServer
+import ru.vs.core.coroutines.ServerScope
 import ru.vs.core.logging.setupDefault
 import ru.vs.core.logging.shutdown
 

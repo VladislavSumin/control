@@ -1,4 +1,4 @@
-package ru.vs.control.server
+package ru.vs.core.coroutines
 
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineName

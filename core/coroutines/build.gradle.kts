@@ -8,6 +8,7 @@ kotlin {
             dependencies {
                 api(libs.kotlin.coroutines.core)
                 implementation(project(":core:di"))
+                implementation(project(":core:logging"))
             }
         }
     }
