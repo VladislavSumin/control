@@ -29,6 +29,9 @@ dependencyResolutionManagement {
 rootProject.name = "control"
 
 include(
+    ":core:acme:core",
+    ":core:acme:server:core",
+    ":core:acme:server:ktor",
     ":core:coroutines",
     ":core:crash-handler:api",
     ":core:crash-handler:impl",
