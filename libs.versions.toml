@@ -8,6 +8,7 @@ kotlin-serialization = "1.3.2"
 kodein = "7.12.0"
 ktor = "2.0.2"
 sentry = "6.1.1"
+jose-jwt = "9.23"
 
 # Gradle plugins
 gradlePlugins-checkUpdates = "0.42.0"
@@ -44,6 +45,7 @@ ktor-network-core = { module = "io.ktor:ktor-network", version.ref = "ktor" }
 
 # Other
 sentry-core = { module = "io.sentry:sentry", version.ref = "sentry" }
+jose-jwt = { module = "com.nimbusds:nimbus-jose-jwt", version.ref = "jose-jwt" }
 
 # Logging
 logging-kermit = { module = "co.touchlab:kermit", version.ref = "logging-kermit" }
