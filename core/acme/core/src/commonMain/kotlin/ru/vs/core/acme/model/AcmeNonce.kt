@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @JvmInline
 @Serializable
-value class AcmeNonce(val encodedNonce: String){
+value class AcmeNonce(val encodedNonce: String) {
     companion object
 }

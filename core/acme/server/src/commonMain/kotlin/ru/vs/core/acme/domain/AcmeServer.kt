@@ -6,10 +6,9 @@ import com.nimbusds.jose.jwk.JWK
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ru.vs.core.acme.model.AcmeAuthHeader
-import ru.vs.core.acme.model.AcmeAuthHeaderAlgorithm
-import ru.vs.core.acme.model.AcmeNonce
-import ru.vs.core.acme.model.AcmeProtectedRequest
+import ru.vs.core.acme.model.*
+import ru.vs.core.acme.repository.AcmeNonceRepository
+import ru.vs.core.acme.repository.AcmeNonceRepositoryImpl
 
 interface AcmeServer {
     suspend fun newNonce(): AcmeNonce
@@ -18,10 +17,13 @@ interface AcmeServer {
 
 class AcmeServerImpl(
     private val nonceFactory: AcmeNonceFactory = AcmeNonceFactoryImpl(),
-    private val json: Json = Json
+    private val nonceRepository: AcmeNonceRepository = AcmeNonceRepositoryImpl(),
+    private val json: Json = Json,
 ) : AcmeServer {
     override suspend fun newNonce(): AcmeNonce {
-        return nonceFactory.create()
+        val nonce = nonceFactory.create()
+        nonceRepository.saveNonce(nonce)
+        return nonce
     }
 
     // TODO оптимизировать код
@@ -30,6 +32,10 @@ class AcmeServerImpl(
         val header = json.decodeFromString<AcmeAuthHeader>(jws.header.toString())
         val jwk = JWK.parse(json.encodeToString(header.jwk))
 
+        // verify nonce
+        if (nonceRepository.deleteNonce(header.nonce)) throw RuntimeException("Invalid nonce")
+
+        // verify signature
         val verifier: JWSVerifier = when (header.alg) {
             AcmeAuthHeaderAlgorithm.RS256 -> {
                 val key = jwk.toRSAKey().toRSAPublicKey()
@@ -39,6 +45,10 @@ class AcmeServerImpl(
         }
 
         if (!jws.verify(verifier)) throw RuntimeException("Invalid JWS Signature")
+
+        val body = json.decodeFromString<AcmeNewAccountRequest>(jws.payload.toString())
+
+        if (!body.termsOfServiceAgreed) throw RuntimeException("termsOfServiceAgreed is false")
 
         println(header)
     }
