@@ -1,6 +1,6 @@
 package ru.vs.core.acme.model
 
-enum class AcmeAuthHeaderAlgorithm {
+enum class AcmeAuthSignatureAlgorithm {
     RS256,
 //    ES256,
 //    EdDSA,

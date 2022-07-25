@@ -7,6 +7,8 @@ import io.ktor.server.plugins.callloging.*
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
+import ru.vs.control.sample.acme_server.domain.AcmeAccountRepositoryImpl
+import ru.vs.core.acme.domain.AcmeServerImpl
 import ru.vs.core.acme.web.acme
 import ru.vs.core.utils.network.KeyStoreUtils
 import java.io.File
@@ -52,7 +54,10 @@ class WebServerImpl : WebServer {
 
     private fun Application.setup() {
         install(CallLogging)
-        acme("https://ca.control.vs:8443")
+        acme(
+            "https://ca.control.vs:8443",
+            acmeServer = AcmeServerImpl(AcmeAccountRepositoryImpl())
+        )
     }
 
     private fun createEmbeddedServer(environment: ApplicationEngineEnvironment): ApplicationEngine =

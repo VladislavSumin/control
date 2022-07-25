@@ -7,15 +7,18 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.vs.core.acme.model.*
+import ru.vs.core.acme.repository.AcmeAccount
+import ru.vs.core.acme.repository.AcmeAccountRepository
 import ru.vs.core.acme.repository.AcmeNonceRepository
 import ru.vs.core.acme.repository.AcmeNonceRepositoryImpl
 
 interface AcmeServer {
     suspend fun newNonce(): AcmeNonce
-    suspend fun newAccount(request: AcmeProtectedRequest)
+    suspend fun newAccount(request: AcmeProtectedRequest): AcmeAccount
 }
 
 class AcmeServerImpl(
+    private val accountRepository: AcmeAccountRepository,
     private val nonceFactory: AcmeNonceFactory = AcmeNonceFactoryImpl(),
     private val nonceRepository: AcmeNonceRepository = AcmeNonceRepositoryImpl(),
     private val json: Json = Json,
@@ -27,17 +30,18 @@ class AcmeServerImpl(
     }
 
     // TODO оптимизировать код
-    override suspend fun newAccount(request: AcmeProtectedRequest) {
+    override suspend fun newAccount(request: AcmeProtectedRequest): AcmeAccount {
         val jws = request.toJWS()
         val header = json.decodeFromString<AcmeAuthHeader>(jws.header.toString())
-        val jwk = JWK.parse(json.encodeToString(header.jwk))
+        val jwkString = json.encodeToString(header.jwk)
+        val jwk = JWK.parse(jwkString)
 
         // verify nonce
         if (nonceRepository.deleteNonce(header.nonce)) throw RuntimeException("Invalid nonce")
 
         // verify signature
         val verifier: JWSVerifier = when (header.alg) {
-            AcmeAuthHeaderAlgorithm.RS256 -> {
+            AcmeAuthSignatureAlgorithm.RS256 -> {
                 val key = jwk.toRSAKey().toRSAPublicKey()
                 if (key.modulus.bitLength() < 2048) throw RuntimeException("Key length to small")
                 RSASSAVerifier(key)
@@ -50,6 +54,12 @@ class AcmeServerImpl(
 
         if (!body.termsOfServiceAgreed) throw RuntimeException("termsOfServiceAgreed is false")
 
-        println(header)
+        return accountRepository.add(
+            AcmeAccount(
+                alg = header.alg,
+                jwk = jwkString,
+                contacts = body.contact,
+            )
+        )
     }
 }
