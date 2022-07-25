@@ -1,11 +1,9 @@
 package ru.vs.control.sample.acme_server.web
 
-import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.callloging.*
-import io.ktor.server.plugins.contentnegotiation.*
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
@@ -19,7 +17,7 @@ interface WebServer {
     suspend fun run()
 }
 
-class WebServerImpl() : WebServer {
+class WebServerImpl : WebServer {
     override suspend fun run() {
         withContext(CoroutineName("web-server")) {
             val environment = createEnvironment()
@@ -54,10 +52,6 @@ class WebServerImpl() : WebServer {
 
     private fun Application.setup() {
         install(CallLogging)
-        install(ContentNegotiation) {
-            json()
-        }
-
         acme("https://ca.control.vs:8443")
     }
 

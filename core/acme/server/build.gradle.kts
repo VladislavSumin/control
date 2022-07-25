@@ -8,6 +8,7 @@ kotlin {
             dependencies {
                 api(project(":core:acme:core"))
                 implementation(project(":core:ktor-server"))
+                implementation(libs.jose.jwt)
             }
         }
     }
